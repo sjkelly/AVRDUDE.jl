@@ -1,8 +1,10 @@
 using ZipFile
 
-ver = "v0.0.1"
+using AVRDUDE
 
-install_path = Pkg.dir("AVRDUDE", "deps", "avrdude", ver)
+ver = AVRDUDE.version
+
+install_path = Pkg.dir("AVRDUDE", "deps", "avrdude", "v"*ver)
 
 !isdir(install_path) && mkpath(install_path)
 
@@ -10,7 +12,7 @@ zip_loc = joinpath(install_path, ver*".zip")
 
 # Grab the repo with all the flash tools
 if !isfile(zip_loc)
-    download("https://github.com/sjkelly/arduino-flash-tools/archive/v0.0.1.zip",
+    download("https://github.com/sjkelly/arduino-flash-tools/archive/v$(ver).zip",
              zip_loc)
 end
 
@@ -28,7 +30,7 @@ end
     end
 end
 
-avrdude_ziploc = "arduino-flash-tools-0.0.1/"*avr_version*"/avrdude/"
+avrdude_ziploc = "arduino-flash-tools-"*ver*"/"*avr_version*"/avrdude/"
 
 r = ZipFile.Reader(zip_loc)
 for f in r.files
